@@ -48,7 +48,7 @@ class Game
     return false
   end
 
-  def play #  and make sure move is possible and that nothing blocks the piece. REMOVE pieces that are moved onto.
+  def play #  and make sure move is possible and that nothing blocks the piece.
     moves = ["[2,1] [3,3]", "[2,8] [1,6]", "[3,3] [4,5]", "7,8 6,6", "[4,5][2,4]", "6,6 4,5", "2,4 1,6", "1,6 2,4"]
     i = -1
     color = "Black"
@@ -82,6 +82,11 @@ class Game
 
   def print_game()
     @board.print_board
-    print @pieces_taken
+    print "-----------Pieces Taken----------- \n"
+    @pieces_taken.each do |color, value|
+      print "#{color.capitalize}: "
+      value.each { |piece_name| print "#{Gameboard.get_chess_piece_icon(piece_name, color.downcase == "white" ? "black" : "white")} " }
+    end
+    print "\n\n"
   end
 end

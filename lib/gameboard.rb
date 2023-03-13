@@ -77,6 +77,11 @@ class Gameboard
     #"┗"
   end
 
+  def self.get_chess_piece_icon(piece_name, piece_color)
+    return @@pieces_emojis.dig(piece_name.downcase, piece_color.downcase)
+  end
+
+
   def print_pieces(&block) # prints the board in all its glory and all pieces on it.
     block = -> (i, j, column) {puts "#{i}, #{j} is #{column.pos if column}"} unless block_given?
     board.each_with_index do |row, i|
