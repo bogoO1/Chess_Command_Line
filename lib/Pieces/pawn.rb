@@ -1,4 +1,4 @@
-require_relative "piece.rb"
+require_relative "../piece.rb"
 
 class Pawn < Piece # make a method move_to that checks if its possible to make a certain move, and then calls super.
   #set up the knight and allow it to generate all possible moves and be on the board.

@@ -1,7 +1,12 @@
 require_relative "gameboard.rb"
-require_relative "individual_pieces.rb"
 require_relative "piece.rb"
 require_relative "game.rb"
+require_relative "Pieces/knight.rb"
+require_relative "Pieces/pawn.rb"
+require_relative "Pieces/rook.rb"
+require_relative "Pieces/queen.rb"
+require_relative "Pieces/bishop.rb"
+require_relative "Pieces/king.rb"
 
 # my_knight = Knight.new([8, 8], "white")
 # #print "Knight Position is: #{my_knight.get_position()}"
