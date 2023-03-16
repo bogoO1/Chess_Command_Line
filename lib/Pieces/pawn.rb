@@ -40,11 +40,9 @@ class Pawn < Piece # make a method move_to that checks if its possible to make a
     return currMove
   end
 
-  def check_move(new_pos)
-    return true if generate_moves().any? {|move| move == new_pos}
+  def check_move(new_pos, board)
+    return true if generate_moves().any? { |move| move == new_pos }
     false
     # return generate_moves().find {|move| move == new_pos}
   end
-
-
 end

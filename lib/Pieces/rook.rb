@@ -3,7 +3,9 @@ require_relative "../piece.rb"
 class Rook < Piece # make a method move_to that checks if its possible to make a certain move, and then calls super.
   #set up the knight and allow it to generate all possible moves and be on the board.
   #create a method that generates the shorted moves from one location to another
-  @@move_pattern = [[1, 2], [1, -2], [-1, 2], [-1, -2], [2, 1], [-2, 1], [2, -1], [-2, -1]]
+  @@move_pattern = []
+  (-8..8).each { |num| @@move_pattern.push([0, num]) }
+  (-8..8).each { |num| @@move_pattern.push([num, 0]) }
 
   def generate_moves(from = @pos, visited = nil)
     moves = @@move_pattern.map { |pattern| [pattern[0] + from[0], pattern[1] + from[1]] }
@@ -40,11 +42,43 @@ class Rook < Piece # make a method move_to that checks if its possible to make a
     return currMove
   end
 
-  def check_move(new_pos)
-    return true if generate_moves().any? {|move| move == new_pos}
-    false
+  def check_move(new_pos, board) # will need board to check if move is possible because needs to see if other pieces block.
+    return false unless (new_pos[0] == pos[0]) ^ (new_pos[1] == pos[1])
+    # check for piece blocking.
+    curr_pos = @pos.clone
+    #find out the move we need to take and then move that way until we are 1 from new_pos.
+    # move new_pos one towards curr_pos first. CHECK!!!
+
+    stepDirectionX = (new_pos[0] - pos[0]) == 0 ? 0 : (new_pos[0] - pos[0]) / (new_pos[0] - pos[0]).abs
+    stepDirectionY = (new_pos[1] - pos[1]) == 0 ? 0 : (new_pos[1] - pos[1]) / (new_pos[1] - pos[1]).abs
+    path_length = [(new_pos[1] - pos[1]).abs, (new_pos[0] - pos[0]).abs].max
+
+    (1...path_length).each do |i|
+      print "\n New Check is #{[pos[0] + (i * stepDirectionX), pos[1] + (i * stepDirectionY)]} \n"
+      return false unless board.dig(pos[0] + (i * stepDirectionX), pos[1] + (i * stepDirectionY)).nil?
+    end
+
+    # while curr_pos != new_pos # Stop the loop if we are only 1 away from the new_pos not when we are there. or make it like a less than comparison.
+    #   puts "CHECKING MOVES: #{curr_pos} #{new_pos}"
+    #   if curr_pos[0] == new_pos[0]
+    #     if curr_pos[1] > new_pos[1]
+    #       curr_pos[1] -= 1
+    #       return false unless board.dig(curr_pos[0], curr_pos[1]).nil?
+    #     else
+    #       curr_pos[1] += 1
+    #       return false unless board.dig(curr_pos[0], curr_pos[1]).nil?
+    #     end
+    #   elsif curr_pos[1] == new_pos[1]
+    #     if curr_pos[0] > new_pos[0]
+    #       curr_pos[0] -= 1
+    #       return false unless board.dig(curr_pos[0], curr_pos[1]).nil?
+    #     else
+    #       curr_pos[0] += 1
+    #       return false unless board.dig(curr_pos[0], curr_pos[1]).nil?
+    #     end
+    #   end
+    # end
+    return true
     # return generate_moves().find {|move| move == new_pos}
   end
-
-
 end

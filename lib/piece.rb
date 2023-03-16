@@ -3,7 +3,6 @@ require_relative "gameboard"
 class Piece
   attr_accessor :pos, :name, :color
 
-
   def initialize(pos, color)
     @pos = pos
     @color = color

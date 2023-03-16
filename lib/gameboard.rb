@@ -1,10 +1,13 @@
+require_relative "colorize.rb"
 
 class Gameboard
   #set up the board and allow it to have pieces on it.
   attr_accessor :board # make the piece have their index be their position on the board
 
 @@pieces_emojis = {
-  "knight" => {"black" => "♘", "white" => "♞"}
+  "knight" => {"black" => "♘", "white" => "♞"},
+  "rook" => {"black" => "♖", "white" => "♜"},
+  "bishop" => {"black" => "♗", "white" => "♝"},
 }
 
   def initialize(size)
@@ -39,6 +42,11 @@ class Gameboard
     return @board.dig(pos[0], pos[1])
   end
 
+  def get_piece_computer_pos(pos)
+    pos = pos.clone
+    return @board.dig(pos[0], pos[1])
+  end
+
   def addPiece(piece, pos)
     pos = pos.clone
     pos = get_computer_pos(pos)
@@ -56,23 +64,29 @@ class Gameboard
 
   def print_board() # prints the board in all its glory and all pieces on it.
     num_row = 8
-    print "\n ┏━━━┳━━━┳━━━┳━━━┳━━━┳━━━┳━━━┳━━━┓\n"
+    print "\n ┏━━━┳━━━┳━━━┳━━━┳━━━┳━━━┳━━━┳━━━┓\n".green
     board.map do |row|
-      print "#{num_row}"
+      print "#{num_row}".brown
       row.map do |column|
         if column.is_a?(Piece)
-          print "┃ #{@@pieces_emojis[column.class.name.downcase][column.color.downcase]} "
+          print "┃" .green
+          if column.color.downcase == "white" then
+            print " #{@@pieces_emojis[column.class.name.downcase][column.color.downcase]} "
+          else
+            print " #{@@pieces_emojis[column.class.name.downcase][column.color.downcase]} ".black
+          end
+
         else
-          print "┃   "
+          print "┃   ".green
         end
       end
       num_row -= 1
-      print "┃\n ┣━━━╋━━━╋━━━╋━━━╋━━━╋━━━╋━━━╋━━━┫\n" if num_row > 0
-      print "┃\n" if num_row <= 0
+      print "┃\n ┣━━━╋━━━╋━━━╋━━━╋━━━╋━━━╋━━━╋━━━┫\n".green if num_row > 0
+      print "┃\n".green if num_row <= 0
     end
 
-    print " ┗━━━┻━━━┻━━━┻━━━┻━━━┻━━━┻━━━┻━━━┛\n"
-    print "   1   2   3   4   5   6   7   8\n"
+    print " ┗━━━┻━━━┻━━━┻━━━┻━━━┻━━━┻━━━┻━━━┛\n".green
+    print "   1   2   3   4   5   6   7   8\n".brown
 
     #"┗"
   end
@@ -87,7 +101,6 @@ class Gameboard
     board.each_with_index do |row, i|
       row.each_with_index do |column, j|
         block.call(i,j,column)
-        
         #puts "#{i}, #{j} is #{column}"
       end
     end

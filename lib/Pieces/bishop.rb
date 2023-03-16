@@ -3,7 +3,12 @@ require_relative "../piece.rb"
 class Bishop < Piece # make a method move_to that checks if its possible to make a certain move, and then calls super.
   #set up the knight and allow it to generate all possible moves and be on the board.
   #create a method that generates the shorted moves from one location to another
-  @@move_pattern = [[1, 2], [1, -2], [-1, 2], [-1, -2], [2, 1], [-2, 1], [2, -1], [-2, -1]]
+  @@move_pattern = []
+  (-8..8).each { |num| @@move_pattern.push([-num, num]) }
+  (-8..8).each { |num| @@move_pattern.push([num, -num]) }
+  (-8..8).each { |num| @@move_pattern.push([num, num]) }
+
+  print "\nBISHOP MOVE PATTERN IS #{@@move_pattern}\n"
 
   def generate_moves(from = @pos, visited = nil)
     moves = @@move_pattern.map { |pattern| [pattern[0] + from[0], pattern[1] + from[1]] }
@@ -40,11 +45,22 @@ class Bishop < Piece # make a method move_to that checks if its possible to make
     return currMove
   end
 
-  def check_move(new_pos)
-    return true if generate_moves().any? {|move| move == new_pos}
-    false
+  def check_move(new_pos, board) # will need board to check if move is possible because needs to see if other pieces block.
+    return false unless (new_pos[0] - pos[0]).abs == (new_pos[1] - pos[1]).abs
+    # check for piece blocking.
+    stepDirectionX = (new_pos[0] - pos[0]) == 0 ? 0 : (new_pos[0] - pos[0]) / (new_pos[0] - pos[0]).abs
+    stepDirectionY = (new_pos[1] - pos[1]) == 0 ? 0 : (new_pos[1] - pos[1]) / (new_pos[1] - pos[1]).abs
+    path_length = [(new_pos[1] - pos[1]).abs, (new_pos[0] - pos[0]).abs].max
+
+    (1...path_length).each do |i|
+      print "\n New Check is #{[pos[0] + (i * stepDirectionX), pos[1] + (i * stepDirectionY)]} \n"
+      return false unless board.dig(pos[0] + (i * stepDirectionX), pos[1] + (i * stepDirectionY)).nil?
+    end
+
+    #find out the move we need to take and then move that way until we are 1 from new_pos.
+    # move new_pos one towards curr_pos first. CHECK!!!
+
+    return true
     # return generate_moves().find {|move| move == new_pos}
   end
-
-
 end
