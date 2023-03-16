@@ -8,6 +8,9 @@ class Gameboard
   "knight" => {"black" => "♘", "white" => "♞"},
   "rook" => {"black" => "♖", "white" => "♜"},
   "bishop" => {"black" => "♗", "white" => "♝"},
+  "queen" => {"black" => "♕", "white" => "♛"},
+  "king" => {"black" => "♔", "white" => "♚"},
+  "pawn" => {"black" => "♙", "white" => "♟"}
 }
 
   def initialize(size)

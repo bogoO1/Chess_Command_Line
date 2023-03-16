@@ -3,7 +3,9 @@ require_relative "../piece.rb"
 class King < Piece # make a method move_to that checks if its possible to make a certain move, and then calls super.
   #set up the knight and allow it to generate all possible moves and be on the board.
   #create a method that generates the shorted moves from one location to another
-  @@move_pattern = [[1, 2], [1, -2], [-1, 2], [-1, -2], [2, 1], [-2, 1], [2, -1], [-2, -1]]
+  @@move_pattern = []
+  (-8..8).each { |num| @@move_pattern.push([0, num]) }
+  (-8..8).each { |num| @@move_pattern.push([num, 0]) }
 
   def generate_moves(from = @pos, visited = nil)
     moves = @@move_pattern.map { |pattern| [pattern[0] + from[0], pattern[1] + from[1]] }
@@ -40,9 +42,7 @@ class King < Piece # make a method move_to that checks if its possible to make a
     return currMove
   end
 
-  def check_move(new_pos, board)
-    return true if generate_moves().any? { |move| move == new_pos }
-    false
-    # return generate_moves().find {|move| move == new_pos}
+  def check_move(new_pos, board) # will need board to check if move is possible because needs to see if other pieces block.
+    return (new_pos[0] - pos[0]).abs <= 1 && (new_pos[1] - pos[1]).abs <= 1 ? true : false
   end
 end

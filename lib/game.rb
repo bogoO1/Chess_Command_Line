@@ -7,6 +7,9 @@ class Game
     "knight" => [[2, 1], [7, 1]],
     "rook" => [[1, 1], [8, 1]],
     "bishop" => [[3, 1], [6, 1]],
+    "queen" => [[4, 1]],
+    "king" => [[5, 1]],
+    "pawn" => [[1, 2], [2, 2], [3, 2], [4, 2], [5, 2], [6, 2], [7, 2], [8, 2]],
   }
   Starting_pos.freeze
 
@@ -59,7 +62,9 @@ class Game
 
   def play #  and make sure move is possible and that nothing blocks the piece.
     #moves = ["[2,1] [3,3]", "[2,8] [1,6]", "[3,3] [4,5]", "7,8 6,6", "[4,5][2,4]", "6,6 4,5", "2,4 1,6", "1,6 2,4", "4,5 5,3", "1,6 2,3"]
-    moves = ["2,1 4,2", "2,8 1,6", "4,2 6,3", "7,8 8,6", "6,3 7,1", "8,1 7,2", "8,1 8,6", "3,8 8,3", "6,1 8,3", "6,8 4,6", "8,6 5,6", "1,8 7,8", "8,3 8,4", "8,3 6,5"]
+    #moves = ["2,1 4,2", "2,8 1,6", "4,2 6,3", "7,8 8,6", "6,3 7,1", "8,1 7,2", "8,1 8,6", "3,8 8,3", "6,1 8,3", "6,8 4,6", "8,6 5,6", "1,8 7,8", "8,3 8,4", "8,3 6,5", "4,8 8,4", "4,1" "5,3", "4,1 4,4", "8,4 4,4", "5,1 5,4", "5,1 6,2"]
+    #moves = ["2,1 3,3" , "3,7 3,6", "3,3 2,5" , "1,7 1,6", "6,2 6,3", "3,6 2,5"] # black pawns check
+    moves = []
     i = -1
     color = "Black"
     while !checkmate() && (moves.length - 1) > i
@@ -80,10 +85,14 @@ class Game
         input.gsub(/\d{1}[,\s]\d{1}/) { |match| move << Array.new(match.split(",").map(&:to_i)) }
         next if move.length < 2
         next if move.any? { |sub_move| sub_move.length < 2 }
+        next if move[1][0] > 8 || move[1][0] < 1 || move[1][1] > 8 || move[1][1] < 1
         print "\n move 0 is #{move[0]}"
         piece = @board.get_piece(move[0])
         puts "Piece is #{piece.class.name}"
-        next if !piece.is_a?(Piece)
+        if !piece.is_a?(Piece)
+          repeat = true
+          next
+        end
         puts "85 is #{piece.class.name}"
 
         next if piece.color.downcase != color.downcase
